@@ -18,6 +18,7 @@ class WorkspaceIndicator extends PanelMenu.Button {
         this._workspaceManager = global.workspace_manager;
         this._settings = settings;
         this._buttons = [];
+        this._underlines = [];
         this._scrollAccumulator = 0;
         this._box = new St.BoxLayout({
             style_class: 'workspace-indicator',
@@ -45,6 +46,7 @@ class WorkspaceIndicator extends PanelMenu.Button {
     _rebuild() {
         this._box.destroy_all_children();
         this._buttons = [];
+        this._underlines = [];
 
         for (let index = 0; index < this._workspaceManager.n_workspaces; index++) {
             const label = new St.Label({
@@ -52,9 +54,22 @@ class WorkspaceIndicator extends PanelMenu.Button {
                 style_class: 'workspace-number',
                 y_align: Clutter.ActorAlign.CENTER,
             });
+            const underline = new St.Widget({
+                style_class: 'workspace-underline',
+                x_align: Clutter.ActorAlign.CENTER,
+            });
+            const content = new St.BoxLayout({
+                style_class: 'workspace-button-content',
+                vertical: true,
+                x_align: Clutter.ActorAlign.CENTER,
+                y_align: Clutter.ActorAlign.CENTER,
+            });
+            content.add_child(label);
+            content.add_child(underline);
+
             const button = new St.Button({
                 style_class: 'workspace-button',
-                child: label,
+                child: content,
                 reactive: true,
                 track_hover: true,
                 can_focus: true,
@@ -69,6 +84,7 @@ class WorkspaceIndicator extends PanelMenu.Button {
 
             this._box.add_child(button);
             this._buttons.push(button);
+            this._underlines.push(underline);
         }
 
         this._syncActiveWorkspace();
@@ -153,6 +169,7 @@ class WorkspaceIndicator extends PanelMenu.Button {
         }
 
         this._buttons = [];
+        this._underlines = [];
         this._box = null;
         this._settings = null;
         this._workspaceManager = null;

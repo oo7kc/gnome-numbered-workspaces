@@ -100,6 +100,16 @@ async function smokeTest() {
         indicator._buttons[targetIndex].has_style_class_name('workspace-button-active'),
         'Active workspace style did not update'
     );
+    assert(
+        indicator._underlines[targetIndex].height === 2,
+        'Active underline was not allocated'
+    );
+    assert(
+        indicator._underlines[targetIndex]
+            .get_theme_node()
+            .get_background_color().alpha > 0,
+        'Active underline was transparent'
+    );
 
     const firstButton = indicator._buttons[0];
     firstButton.emit('clicked', 1);

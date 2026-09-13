@@ -4,14 +4,24 @@
 
 .workspace-button {
     min-width: 12px;
-    padding: 0 5px;
+    padding: 0 4px;
     border-radius: 0;
     color: rgba(255, 255, 255, 0.60);
 }
 
 .workspace-number {
-    padding: 1px 3px 0;
-    border-bottom: 2px solid transparent;
+    padding: 0 3px;
+}
+
+.workspace-button-content {
+    spacing: 0;
+}
+
+.workspace-underline {
+    width: 8px;
+    height: 2px;
+    border-radius: 1px;
+    background-color: transparent;
 }
 
 .workspace-button:hover,
@@ -23,8 +33,8 @@
     color: rgba(255, 255, 255, 1.0);
 }
 
-.workspace-style-underline .workspace-button-active .workspace-number {
-    border-bottom-color: -st-accent-color;
+.workspace-style-underline .workspace-button-active .workspace-underline {
+    background-color: -st-accent-color;
 }
 
 .workspace-style-subtle-background .workspace-button-active .workspace-number {
