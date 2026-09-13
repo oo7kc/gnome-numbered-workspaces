@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.gnome.shell.extensions.gnome-numbered-workspaces"
+          path="/org/gnome/shell/extensions/gnome-numbered-workspaces/">
+    <key name="active-style" type="s">
+      <choices>
+        <choice value="underline"/>
+        <choice value="subtle-background"/>
+      </choices>
+      <default>'underline'</default>
+      <summary>Active workspace indicator style</summary>
+      <description>How the active workspace is distinguished in the panel.</description>
+    </key>
+  </schema>
+</schemalist>

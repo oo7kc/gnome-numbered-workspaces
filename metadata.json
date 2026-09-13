@@ -1,0 +1,8 @@
+{
+  "uuid": "gnome-numbered-workspaces@kelvin.local",
+  "name": "GNOME Numbered Workspaces",
+  "description": "A minimal numbered workspace indicator for GNOME Shell.",
+  "shell-version": ["50"],
+  "settings-schema": "org.gnome.shell.extensions.gnome-numbered-workspaces",
+  "url": "https://github.com/oo7kc/gnome-numbered-workspaces"
+}
