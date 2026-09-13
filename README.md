@@ -1,6 +1,6 @@
 # GNOME Numbered Workspaces
 
-A small GNOME Shell 50 extension that adds compact numbered workspace buttons to the left side of the top panel. It supports click and scroll navigation, highlights the active workspace, and provides simple preferences for workspace count and indicator style.
+A small GNOME Shell 50 extension that replaces the built-in Activities workspace pill with compact numbered workspace buttons on the left side of the top panel. It supports click and scroll navigation, highlights the active workspace, and provides simple preferences for workspace count and indicator style.
 
 ## Install
 

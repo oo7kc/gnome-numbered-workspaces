@@ -57,6 +57,11 @@ async function smokeTest() {
         return indicator !== undefined;
     }, 'Panel indicator was not registered');
 
+    const activities = Main.panel.statusArea.activities;
+    assert(!activities.visible, 'Built-in Activities indicator remained visible');
+    activities.show();
+    assert(!activities.visible, 'Built-in Activities indicator could reappear');
+
     assert(
         indicator._buttons.length === global.workspace_manager.n_workspaces,
         'Workspace button count does not match GNOME'
@@ -147,11 +152,13 @@ async function smokeTest() {
         () => Main.panel.statusArea[UUID] === undefined,
         'Panel indicator remained after disable'
     );
+    assert(activities.visible, 'Built-in Activities indicator was not restored');
     assert(Main.extensionManager.enableExtension(UUID), 'Could not re-enable extension');
     await waitFor(
         () => Main.panel.statusArea[UUID] !== undefined,
         'Panel indicator did not return after enable'
     );
+    assert(!activities.visible, 'Built-in Activities indicator returned after enable');
 }
 
 

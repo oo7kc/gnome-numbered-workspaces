@@ -167,11 +167,34 @@ export default class GnomeNumberedWorkspacesExtension extends Extension {
         this._settings = this.getSettings();
         this._indicator = new WorkspaceIndicator(this._settings);
         Main.panel.addToStatusArea(this.uuid, this._indicator, 1, 'left');
+
+        this._activities = Main.panel.statusArea.activities ?? null;
+        if (this._activities) {
+            this._activitiesWasVisible = this._activities.visible;
+            this._activitiesVisibilitySignal = this._activities.connect(
+                'notify::visible', () => {
+                    if (this._activities?.visible)
+                        this._activities.hide();
+                }
+            );
+            this._activities.hide();
+        }
     }
 
     disable() {
         this._indicator?.destroy();
         this._indicator = null;
+
+        if (this._activities && this._activitiesVisibilitySignal) {
+            this._activities.disconnect(this._activitiesVisibilitySignal);
+            this._activitiesVisibilitySignal = 0;
+        }
+
+        if (this._activitiesWasVisible)
+            this._activities?.show();
+
+        this._activities = null;
+        this._activitiesWasVisible = false;
         this._settings = null;
     }
 }
