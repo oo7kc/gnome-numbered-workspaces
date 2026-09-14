@@ -1,3 +1,4 @@
+import Atk from 'gi://Atk';
 import Clutter from 'gi://Clutter';
 import GObject from 'gi://GObject';
 import St from 'gi://St';
@@ -23,6 +24,8 @@ class WorkspaceIndicator extends PanelMenu.Button {
         this._box = new St.BoxLayout({
             style_class: 'workspace-indicator',
             y_align: Clutter.ActorAlign.FILL,
+            accessible_role: Atk.Role.PAGE_TAB_LIST,
+            accessible_name: 'Workspaces',
         });
         this.add_child(this._box);
 
@@ -73,6 +76,7 @@ class WorkspaceIndicator extends PanelMenu.Button {
                 reactive: true,
                 track_hover: true,
                 can_focus: true,
+                accessible_role: Atk.Role.PAGE_TAB,
                 accessible_name: `Workspace ${index + 1}`,
             });
 
@@ -140,10 +144,13 @@ class WorkspaceIndicator extends PanelMenu.Button {
         const activeIndex = this._workspaceManager.get_active_workspace_index();
 
         for (let index = 0; index < this._buttons.length; index++) {
-            if (index === activeIndex)
+            if (index === activeIndex) {
                 this._buttons[index].add_style_class_name('workspace-button-active');
-            else
+                this._buttons[index].add_accessible_state(Atk.StateType.SELECTED);
+            } else {
                 this._buttons[index].remove_style_class_name('workspace-button-active');
+                this._buttons[index].remove_accessible_state(Atk.StateType.SELECTED);
+            }
         }
     }
 

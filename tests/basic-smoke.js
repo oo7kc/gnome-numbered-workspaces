@@ -1,3 +1,4 @@
+import Atk from 'gi://Atk';
 import Clutter from 'gi://Clutter';
 import Gio from 'gi://Gio';
 import Meta from 'gi://Meta';
@@ -21,6 +22,27 @@ Gio._promisify(
 function assert(condition, message) {
     if (!condition)
         throw new Error(message);
+}
+
+
+function assertAccessibleSelection(indicator, activeIndex) {
+    assert(
+        indicator._box.get_accessible().get_role() === Atk.Role.PAGE_TAB_LIST,
+        'Workspace group was not exposed as a tab list'
+    );
+    for (const [index, button] of indicator._buttons.entries()) {
+        const accessible = button.get_accessible();
+        assert(
+            accessible.get_role() === Atk.Role.PAGE_TAB &&
+                accessible.get_name() === `Workspace ${index + 1}`,
+            'Workspace number was not exposed as a named tab'
+        );
+        assert(
+            accessible.ref_state_set().contains_state(Atk.StateType.SELECTED) ===
+                (index === activeIndex),
+            `Screen-reader selection was incorrect for workspace ${index + 1}`
+        );
+    }
 }
 
 
@@ -100,6 +122,7 @@ async function smokeTest() {
         indicator._buttons[targetIndex].has_style_class_name('workspace-button-active'),
         'Active workspace style did not update'
     );
+    assertAccessibleSelection(indicator, targetIndex);
     assert(
         indicator._underlines[targetIndex].height === 2,
         'Active underline was not allocated'
@@ -119,6 +142,7 @@ async function smokeTest() {
         global.workspace_manager.get_active_workspace_index() === 0,
         'Clicking a workspace number did not activate it'
     );
+    assertAccessibleSelection(indicator, 0);
 
     const scrollUp = {
         get_scroll_direction: () => Clutter.ScrollDirection.UP,
@@ -138,6 +162,7 @@ async function smokeTest() {
         global.workspace_manager.get_active_workspace_index() === 1,
         'Scrolling down did not activate the next workspace'
     );
+    assertAccessibleSelection(indicator, 1);
 
     wmSettings.set_int('num-workspaces', 5);
     await waitFor(
@@ -149,6 +174,7 @@ async function smokeTest() {
         .get_workspace_by_index(2)
         .activate(global.get_current_time());
     await Scripting.waitLeisure();
+    assertAccessibleSelection(indicator, 2);
     await capturePanel('/tmp/gnome-numbered-workspaces-underline.png');
 
     indicator._settings.set_string('active-style', 'subtle-background');
@@ -169,6 +195,7 @@ async function smokeTest() {
         'Panel indicator did not return after enable'
     );
     assert(!activities.visible, 'Built-in Activities indicator returned after enable');
+    assertAccessibleSelection(Main.panel.statusArea[UUID], 2);
 }
 
 
